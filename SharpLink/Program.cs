@@ -39,7 +39,6 @@ namespace SharpLink
 			if (args.Length == 0) {
 				// log to file
 				Utils.setLogFile("server.log");
-                
 			} else {
 				// log to file
 				Utils.setLogFile("client.log");
