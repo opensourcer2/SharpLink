@@ -7,8 +7,8 @@ So why it is useful?
 You can use it to play LAN games with your friends.
 SSH to your office computer from home, and many many things that used to be possible only in LANs.
 
-##Compile
-###Linux
+## Compile
+### Linux
 1. Install toxcore, the instruction can be found [here](https://github.com/irungentoo/toxcore/blob/master/INSTALL.md)
 2. Install MonoDevelop
    ```
@@ -16,7 +16,7 @@ SSH to your office computer from home, and many many things that used to be poss
    ```
 3. Compile, you have to set build type to Debug POSIX or Release POSIX to build it. If you are facing with errors of dll not match, you have to reinstall depent libraries.
 
-###Windows
+### Windows
 clone this project
 
     git clone https://github.com/randoms/SharpLink
@@ -28,7 +28,7 @@ How to compile
 
 open SharpLink.sln with visual studio. You can compile it with visual studio.
 
-##Usage
+## Usage
 For example if computer B wants to connect to computer A's port 3128. But computer A and computer B are not in the same LAN.
 A is connected to the Internet via a router.
 First run server program on computer A
@@ -75,7 +75,7 @@ How this is achieved
 
 In fact this process is simple. We create a socket both on local computer and remote computer. The two socket communicate via tox. And it seems as if we have binded the remote computer's port to local port.
 
-##Licence
+## Licence
   You are free to do anything...
 
 ***SharpLink*** 简单来说就是一个端口代理软件。它能够把任意远程电脑的端口映射到本地端口。这样你就可以通过直接连接本地端口来和远程的电脑通信。这是一个p2p软件所以连接速度要比vpn之类的快很多。这个软件是建立在[Tox](https://github.com/irungentoo/toxcore "toxcore")项目之上的。
@@ -84,15 +84,15 @@ In fact this process is simple. We create a socket both on local computer and re
 有很多用处，你可以利用这个和不同局域网的人玩局域网游戏。远程控制不在同一个局域网内的电脑。连接不在同一个局域网的ftp服务器。总之，几乎所有被局域网限制的应用都可用这个来解除限制。
 
 如果你对这个软件有什么建议欢迎在issue里面提出
+ 
+## 编译安装
 
-##编译安装
-
-###Linux
+### Linux
 1. 安装toxcore,这里有详细的安装方法
 2. 安装MonoDevelop,打开IDE之后编译.注意要把变异类型设置成Debug POSIX 或者 Release POSIX版本.
 
 
-###Windows
+### Windows
 
 获取主程序
 
@@ -149,5 +149,5 @@ In fact this process is simple. We create a socket both on local computer and re
 
 这个实际上是在本地和远程电脑上分别创建了一个socket，然后这两个socket的通信通过tox来实现。由于tox本身是p2p的所以实现了p2p的效果。从外表看来就好像直接把远程的端口绑定到了本地一样。
 
-##软件许可
+## 软件许可
   You are free to do anything...
