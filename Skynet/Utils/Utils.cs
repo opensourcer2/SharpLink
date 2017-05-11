@@ -74,16 +74,13 @@ namespace Skynet.Utils
             return res;
         }
 
-		#if(DEBUG)
+
 		private static StreamWriter streamwriter = null;
 		private static object loglock = new object();
 		private static string logFilename = "log.txt";
-		#endif
 
 		public static void setLogFile(string filename){
-			#if(DEBUG)
 			logFilename = filename;
-			#endif
 		}
 
 		public static void Log(string detail) {
@@ -99,6 +96,21 @@ namespace Skynet.Utils
 				streamwriter.Flush();
 			}
 			#endif
+		}
+
+		public static void Log(string detail, bool forceLog) {
+			if (forceLog) {
+				lock (loglock) {
+					if (streamwriter == null)
+					{
+						FileStream fs = new FileStream(logFilename, FileMode.Create);
+						streamwriter = new StreamWriter(fs);
+						streamwriter.AutoFlush = true;
+					}
+					streamwriter.WriteLine("Time: " + UnixTimeNow() + ", " + detail);
+					streamwriter.Flush();
+				}
+			}
 		}
 
 		public static string GetLocalIPAddress()
