@@ -175,7 +175,7 @@ namespace Skynet.Base
 		}
 
 		static ToxNode[] Nodes = new ToxNode[] {
-			new ToxNode ("198.98.51.198", 33445, new ToxKey (ToxKeyType.Public, "1D5A5F2F5D6233058BF0259B09622FB40B482E4FA0931EB8FD3AB8E7BF7DAF6F"))
+			new ToxNode ("119.23.239.31", 33445, new ToxKey (ToxKeyType.Public, "7F613A23C9EA5AC200264EB727429F39931A86C39B67FC14D9ECA4EBE0D37F25"))
 		};
 
 		void tox_OnFriendLosslessPacketReceived (object sender, ToxEventArgs.FriendPacketEventArgs e)
@@ -333,6 +333,7 @@ namespace Skynet.Base
 						friendNum = tox.GetFriendByPublicKey (toxkey);
 					}
 
+					// wait frient online
 					int waitCount = 0;
 					int maxCount = 500;
 					if (connectedList.IndexOf (toxkey.GetString ()) == -1)
@@ -355,7 +356,7 @@ namespace Skynet.Base
 					var mesError = new ToxErrorFriendCustomPacket ();
 					// retry send message
 					int retryCount = 0;
-					while (retryCount < 10) {
+					while (retryCount < 60) {
 						byte[] msgToSend = new byte[msg.Length + 1];
 						msgToSend [0] = 170; // The first byte must be in the range 160-191.
 						msg.CopyTo (msgToSend, 1);
@@ -365,6 +366,7 @@ namespace Skynet.Base
 						}
 
 						Utils.Utils.Log ("Event: " + mesError);
+						Console.WriteLine("Event: " + mesError);
 						if (mesError == ToxErrorFriendCustomPacket.SendQ) {
 							Thread.Sleep (10);
 							continue;
@@ -373,7 +375,7 @@ namespace Skynet.Base
 						Thread.Sleep (100);
 
 					}
-					if (retryCount == 10)
+					if (retryCount == 60)
 						return false;
 					return true;
 				}
