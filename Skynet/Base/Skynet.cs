@@ -77,7 +77,7 @@ namespace Skynet.Base
 					Thread.Sleep (2000);
 					if (tox.IsConnected) {
 						Console.WriteLine ("From Server " + httpPort + ":" + "tox is connected.");
-						Utils.Utils.Log("From Server " + httpPort + ":" + "tox is connected.");
+						Utils.Utils.Log("From Server " + httpPort + ":" + "tox is connected.", true);
 						offLineCount = 0;
 						// send a online message to server
 						if(filename != "")
@@ -87,14 +87,13 @@ namespace Skynet.Base
 							}
 						break;
 					}else {
-						Utils.Utils.Log ("Event: tox is offline");
+						Utils.Utils.Log ("Event: tox is offline", true);
 						offLineCount ++;
 					}
 					if(offLineCount > 10){
 						// start a new tox node
 						offLineCount = 0;
 						tox.Stop();
-						tox.Dispose();
 						options = new ToxOptions (true, true);
 						if (filename != "") {
 							tox = new Tox (options, ToxData.FromDisk (filename));
@@ -114,14 +113,26 @@ namespace Skynet.Base
 						tox.Start ();
 
 						id = tox.Id.ToString ();
+						Console.WriteLine ("Start a new Tox node");
 						Console.WriteLine ("ID: {0}", id);
+						Utils.Utils.Log ("Start a new Tox node", true);
 						Utils.Utils.Log ("ID: " + id, true);
 					}
 				}
-
+				bool onlineStatus = true;
 				while (true) {
 					// start queue process
 					while (tox.IsConnected) {
+						if(!onlineStatus){
+							onlineStatus = true;
+							Utils.Utils.Log ("Event: tox is online", true);
+							// send a online message to server
+							if(filename != "")
+								using(var client = new HttpClient()){
+									ClientInfo minfo = new ClientInfo(tox.Id.ToString(), Utils.Utils.GetLocalIPAddress());
+									await client.PostAsJsonAsync("http://xiaoqiang.bwbot.org/v2/online", minfo);
+								}
+						}
 						Package processPack = null;
 						lock (reqQueueLock) {
 							if (reqQueue.Count > 0) {
@@ -134,7 +145,8 @@ namespace Skynet.Base
 						} else
 							Thread.Sleep (1);
 					}
-					Utils.Utils.Log ("Event: tox is offline");
+					Utils.Utils.Log ("Event: tox is offline", true);
+					onlineStatus = false;
 					Thread.Sleep (1000);
 				}
 			}, TaskCreationOptions.LongRunning).ForgetOrThrow();
