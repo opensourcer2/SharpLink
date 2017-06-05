@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Skynet.Base;
 using System.Net;
 using System.Net.Sockets;
 using SharpTox.Core;
 using System.Threading;
-using Newtonsoft.Json;
 using System.IO;
 using Skynet.Utils;
 using System.Reflection;
@@ -27,6 +25,10 @@ namespace SharpLink
 
 	class Program
 	{
+
+		private static bool runningFlag = true;
+		public static bool IsConnected = false;
+
 		static void Main (string[] args)
 		{
 			if (args.Length != 4 && args.Length != 0) {
@@ -53,18 +55,28 @@ namespace SharpLink
 			} else {
 				mSkynet = new Skynet.Base.Skynet ();
 			}
-            
+
 			if (args.Length == 4) {
 				string localPort = args [0];
 				string targetToxId = args [1];
 				string targetIP = args [2];
 				int targetPort = Convert.ToInt32 (args [3]);
 
-                if (!ToxId.IsValid(targetToxId)) {
-                    Console.WriteLine("not a valid id");
-                    Console.WriteLine("usage: SharpLink [local_port] [target_tox_id] [target_ip] [target_port]");
-                    return;
-                }
+				if (!ToxId.IsValid(targetToxId)) {
+					Console.WriteLine("not a valid id");
+					Console.WriteLine("usage: SharpLink [local_port] [target_tox_id] [target_ip] [target_port]");
+					return;
+				}
+
+				Task.Run(() =>
+					{
+						while (runningFlag)
+						{
+							IsConnected = mSkynet.HandShake(new ToxId(targetToxId)).GetAwaiter().GetResult();
+							Thread.Sleep(20 * 1000);
+						}
+					});
+
 
 				// create local socket server
 				IPAddress ip = IPAddress.Parse ("0.0.0.0");
@@ -120,7 +132,7 @@ namespace SharpLink
 												break;
 											}
 										}
-                                            
+
 									} catch (Exception e) {
 										Utils.Log ("Event: ERROR " + e.Message);
 										Utils.Log (e.StackTrace);
@@ -253,7 +265,7 @@ namespace SharpLink
 											Utils.Log ("Event: Socket already closed" + ipstr + " " + port + " mLinkID " + mlink.clientId);
 											break;
 										}
-											
+
 										if (size == 0) {
 											if (!closeFlag && mClientSocket.Connected) {
 												Utils.Log ("Event: Close Connection, Clientid: " + mlink.clientId);
@@ -312,9 +324,8 @@ namespace SharpLink
 					}).ForgetOrThrow();
 				} else if (req.toNodeId == "" && req.url == "/handshake") {
 					var response = req.createResponse (Encoding.UTF8.GetBytes ("OK"));
-					Utils.Log ("Event: HandShake from " + response.toToxId + ", MessageID: " + req.uuid, true);
-					Utils.Log ("Event: Send HandShake response " + response.uuid + ", ToxId: " + response.toToxId, true);
-					Console.WriteLine("Event: HandShake from " + response.toToxId + ", MessageID: " + req.uuid);
+					Utils.Log ("Event: HandShake from " + response.toToxId + ", MessageID: " + req.uuid);
+					Utils.Log ("Event: Send HandShake response " + response.uuid + ", ToxId: " + response.toToxId);
 					mSkynet.sendResponse (response, new ToxId (response.toToxId));
 				}
 			});
