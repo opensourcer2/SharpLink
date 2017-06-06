@@ -7,7 +7,7 @@ namespace SharpTox.Dns
     internal static class ToxDnsFunctions
     {
 #if POSIX
-		const string dll = "libtoxdns.so";
+        const string dll = "libtoxdns.so";
 #else 
 		const string dll = "libtox";
 #endif

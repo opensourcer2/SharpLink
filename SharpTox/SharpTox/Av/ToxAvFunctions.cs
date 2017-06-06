@@ -7,7 +7,7 @@ namespace SharpTox.Av
     internal static class ToxAvFunctions
     {
 #if POSIX
-		const string dll = "libtoxav.so";
+        const string dll = "libtoxav.so";
 #else 
 		const string dll = "libtox";
 #endif
