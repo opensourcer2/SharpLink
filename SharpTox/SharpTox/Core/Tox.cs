@@ -384,15 +384,14 @@ namespace SharpTox.Core
             _cancelTokenSource = new CancellationTokenSource();
             _running = true;
 
-            Task.Factory.StartNew(async () =>
+            Task.Factory.StartNew(() =>
             {
                 while (_running)
                 {
                     if (_cancelTokenSource.IsCancellationRequested)
                         break;
-
                     int delay = DoIterate();
-                    await Task.Delay(delay);
+                    Thread.Sleep(delay);
                 }
             }, _cancelTokenSource.Token, TaskCreationOptions.LongRunning, TaskScheduler.Default);
         }

@@ -11,7 +11,7 @@ namespace SharpTox.Core
 #if POSIX
         const string dll = "libtoxcore.so";
 #else
-		const string dll = "libtox";
+        const string dll = "libtox";
 #endif
 
         [DllImport(dll, CallingConvention = CallingConvention.Cdecl, EntryPoint = "tox_new")]
