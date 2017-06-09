@@ -69,7 +69,7 @@ namespace Skynet.Base
 
             string id = tox.Id.ToString();
             Console.WriteLine("ID: {0}", id);
-            Utils.Utils.Log("ID: " + id);
+            Utils.Utils.Log("ID: " + id, true);
 
             // Log tox online status
             Task.Factory.StartNew(async () =>
@@ -126,7 +126,7 @@ namespace Skynet.Base
                         id = tox.Id.ToString();
                         Console.WriteLine("ID: {0}", id);
                         Console.WriteLine("Start a new Tox node");
-                        Utils.Utils.Log("ID: " + id);
+                        Utils.Utils.Log("ID: " + id, true);
                     }
                 }
 
