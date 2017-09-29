@@ -24,8 +24,10 @@ catkin_package()
 set(BUILD_CMD "xbuild")
 set(BUILD_OPTION "/p:Configuration=Release POSIX")
 set(SOLUTION_NAME "${CMAKE_CURRENT_LIST_DIR}/SharpLink.sln")
-execute_process(COMMAND ${BUILD_CMD} ${BUILD_OPTION} ${SOLUTION_NAME}
-)
+execute_process(COMMAND ${BUILD_CMD} ${BUILD_OPTION} ${SOLUTION_NAME})
+execute_process(COMMAND "chmod" "+x" "${CMAKE_CURRENT_LIST_DIR}/SharpLink/bin/Release/SharpLink.exe")
+# set right permissions
+
 
 # copy to devel
 file(GLOB SharpLinkFiles
