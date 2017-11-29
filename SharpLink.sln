@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Skynet", "Skynet\Skynet.csproj", "{98046E68-91F8-43E2-BA7B-A166F24C52FA}"
 EndProject
@@ -93,12 +93,15 @@ Global
 		{B3AB7D92-3D7A-41B2-86D1-D1B256B07663}.Release POSIX|x86.Build.0 = Release POSIX|x86
 		{B3AB7D92-3D7A-41B2-86D1-D1B256B07663}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B3AB7D92-3D7A-41B2-86D1-D1B256B07663}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B3AB7D92-3D7A-41B2-86D1-D1B256B07663}.Release|x64.ActiveCfg = Release|x64
-		{B3AB7D92-3D7A-41B2-86D1-D1B256B07663}.Release|x64.Build.0 = Release|x64
+		{B3AB7D92-3D7A-41B2-86D1-D1B256B07663}.Release|x64.ActiveCfg = Release|Any CPU
+		{B3AB7D92-3D7A-41B2-86D1-D1B256B07663}.Release|x64.Build.0 = Release|Any CPU
 		{B3AB7D92-3D7A-41B2-86D1-D1B256B07663}.Release|x86.ActiveCfg = Release|x86
 		{B3AB7D92-3D7A-41B2-86D1-D1B256B07663}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F8758012-BE57-419B-A5AD-B819B2559792}
 	EndGlobalSection
 EndGlobal
