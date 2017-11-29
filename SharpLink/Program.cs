@@ -100,6 +100,7 @@ namespace SharpLink
                 // 连接维护程序
                 Task.Run(() =>
                 {
+                    int disconnectCount = 0;
                     while (runningFlag)
                     {
                         IsConnected = mSkynet.HandShake(new ToxId(targetToxId)).GetAwaiter().GetResult();
@@ -107,10 +108,18 @@ namespace SharpLink
                             var toxid = new ToxId(targetToxId);
                             ToxKey toxkey = toxid.PublicKey;
                             int friendNum = mSkynet.tox.GetFriendByPublicKey(toxkey);
-                            if(friendNum == -1)
-                                mSkynet.tox.DeleteFriend(friendNum);
+                            if (friendNum != -1 && disconnectCount > 15) { // wait 150s
+                                Utils.Log("delete friend " + targetToxId);
+                                Console.WriteLine("delete friend " + targetToxId);
+                                disconnectCount = 0;
+                                mSkynet.DeleteFriend(friendNum);
+                            }
+                            disconnectCount += 1;
+                        }else
+                        {
+                            disconnectCount = 0;
                         }
-                        Thread.Sleep(60 * 1000);
+                        Thread.Sleep(10 * 1000);
                     }
                 });
 

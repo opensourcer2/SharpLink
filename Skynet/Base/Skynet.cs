@@ -589,7 +589,7 @@ namespace Skynet.Base
                             }
                         }
                     }
-                    Console.WriteLine(Utils.Utils.UnixTimeNow() + "Timeout Happends");
+                    Console.WriteLine(Utils.Utils.UnixTimeNow() + " Timeout Happends");
                     lock (mPendingReqLock)
                     {
                         if (mPendingReqList.Keys.Contains(req.uuid))
@@ -615,6 +615,12 @@ namespace Skynet.Base
                 Utils.Utils.Log("Event: Response unlocked, ReqId: " + req.uuid);
                 return mRes;
             }, TaskCreationOptions.LongRunning);
+        }
+
+        public bool DeleteFriend(int friendNum) {
+            lock (sendLock) {
+                return tox.DeleteFriend(friendNum);
+            }
         }
 
         public async Task<bool> HandShake(ToxId target, int timeout = 20)
