@@ -6,43 +6,43 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ProtoBuf;
 
 namespace Skynet.Models
 {
+    [ProtoContract]
     public class ToxResponse
     {
+        [ProtoMember(1)]
         public string url { get; set; }
+        [ProtoMember(2)]
         public string uuid { get; set; }
+        [ProtoMember(3)]
         public byte[] content { get; set; }
+        [ProtoMember(4)]
         public string fromNodeId { get; set; }
+        [ProtoMember(5)]
         public string fromToxId { get; set; }
+        [ProtoMember(6)]
         public string toNodeId { get; set; }
+        [ProtoMember(7)]
         public string toToxId { get; set; }
 
         public byte[] getBytes()
         {
-            MemoryStream ms = new MemoryStream();
-            using (BsonWriter writer = new BsonWriter(ms))
+            using (MemoryStream ms = new MemoryStream())
             {
-                JsonSerializer serializer = new JsonSerializer();
-                serializer.Serialize(writer, this);
+                Serializer.Serialize(ms, this);
+                return ms.ToArray();
             }
-            var res = ms.ToArray();
-            ms.Close();
-            return res;
         }
 
         public static ToxResponse fromBytes(byte[] data)
         {
-            MemoryStream ms = new MemoryStream(data);
-            ToxResponse res;
-            using (BsonReader reader = new BsonReader(ms))
+            using (MemoryStream ms = new MemoryStream(data))
             {
-                JsonSerializer serializer = new JsonSerializer();
-                res = serializer.Deserialize<ToxResponse>(reader);
+                return Serializer.Deserialize<ToxResponse>(ms);
             }
-            ms.Close();
-            return res;
         }
     }
 }

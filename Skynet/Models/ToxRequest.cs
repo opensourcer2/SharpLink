@@ -6,19 +6,30 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ProtoBuf;
 
 namespace Skynet.Models
 {
+    [ProtoContract]
     public class ToxRequest
     {
+        [ProtoMember(1)]
         public string url { get; set; }
+        [ProtoMember(2)]
         public string method { get; set; }
+        [ProtoMember(3)]
         public string uuid { get; set; }
+        [ProtoMember(4)]
         public byte[] content { get; set; }
+        [ProtoMember(5)]
         public string fromNodeId { get; set; }
+        [ProtoMember(6)]
         public string fromToxId { get; set; }
+        [ProtoMember(7)]
         public string toNodeId { get; set; }
+        [ProtoMember(8)]
         public string toToxId { get; set; }
+        [ProtoMember(9)]
         public long time { get; set; }
 
         public ToxRequest()
@@ -42,36 +53,25 @@ namespace Skynet.Models
 
         public byte[] getBytes()
         {
-            MemoryStream ms = new MemoryStream();
-            using (BsonWriter writer = new BsonWriter(ms))
+            Console.WriteLine("ToxRequest getBytes");
+            using (MemoryStream ms = new MemoryStream())
             {
-                JsonSerializer serializer = new JsonSerializer();
-                serializer.Serialize(writer, this);
+                Console.WriteLine("ToxRequest getBytes0.1");
+                Serializer.Serialize(ms, this);
+                Console.WriteLine("ToxRequest getBytes0.2");
+
+                var res = ms.ToArray();
+                Console.WriteLine("ToxRequest getBytes 1");
+                return res;
             }
-            var res = ms.ToArray();
-            ms.Close();
-            return res;
         }
 
         public static ToxRequest fromBytes(byte[] data)
         {
-            MemoryStream ms = new MemoryStream(data);
-            ToxRequest res;
-            using (BsonReader reader = new BsonReader(ms))
+            using (MemoryStream ms = new MemoryStream(data))
             {
-                JsonSerializer serializer = new JsonSerializer();
-                try
-                {
-                    res = serializer.Deserialize<ToxRequest>(reader);
-                }
-                catch
-                {
-                    res = null;
-                }
-
+                return Serializer.Deserialize<ToxRequest>(ms);
             }
-            ms.Close();
-            return res;
         }
 
 
