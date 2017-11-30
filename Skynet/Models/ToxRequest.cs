@@ -53,16 +53,10 @@ namespace Skynet.Models
 
         public byte[] getBytes()
         {
-            Console.WriteLine("ToxRequest getBytes");
             using (MemoryStream ms = new MemoryStream())
             {
-                Console.WriteLine("ToxRequest getBytes0.1");
                 Serializer.Serialize(ms, this);
-                Console.WriteLine("ToxRequest getBytes0.2");
-
-                var res = ms.ToArray();
-                Console.WriteLine("ToxRequest getBytes 1");
-                return res;
+                return ms.ToArray();
             }
         }
 
