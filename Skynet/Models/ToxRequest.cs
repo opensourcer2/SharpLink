@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Bson;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -55,7 +53,9 @@ namespace Skynet.Models
         {
             using (MemoryStream ms = new MemoryStream())
             {
+				Console.WriteLine ("OK1");
                 Serializer.Serialize(ms, this);
+				Console.WriteLine ("OK2");
                 return ms.ToArray();
             }
         }
@@ -64,7 +64,9 @@ namespace Skynet.Models
         {
             using (MemoryStream ms = new MemoryStream(data))
             {
+				Console.WriteLine ("OK3");
                 return Serializer.Deserialize<ToxRequest>(ms);
+				Console.WriteLine ("OK4");
             }
         }
 

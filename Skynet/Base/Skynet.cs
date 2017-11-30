@@ -218,7 +218,7 @@ namespace Skynet.Base
             {
                 receivedData[i] = e.Data[i + 1];
             }
-            Package receivedPackage = Package.fromBytesStatic(receivedData);
+            Package receivedPackage = Package.fromBytes(receivedData);
             if (receivedPackage.currentCount == 0)
             {
                 if (receivedPackage.totalCount == 1)
@@ -423,7 +423,7 @@ namespace Skynet.Base
                         Console.WriteLine(Utils.Utils.UnixTimeNow() + " Event: " + mesError);
                         if (mesError == ToxErrorFriendCustomPacket.SendQ)
                         {
-                            Thread.Sleep(100);
+                            Thread.Sleep(20);
                             continue;
                         }
                         retryCount++;
