@@ -25,6 +25,8 @@ namespace Skynet.Models
 		[ProtoMember(6)]
         public uint startIndex { get; set; }
 
+		static Package mStaticPackage = null;
+
 
         public byte[] toBytes()
         {
@@ -42,6 +44,31 @@ namespace Skynet.Models
 				return Serializer.Deserialize<Package>(ms);
 			}
         }
+
+		public static Package fromBytesStatic(byte[] data)
+		{
+			byte[] uuidbytes = new byte[16];
+			for (int i = 0; i < 16; i++)
+			{
+				uuidbytes[i] = data[i];
+			}
+			if (mStaticPackage == null)
+				mStaticPackage = new Package();
+			mStaticPackage.uuid = new Guid(uuidbytes).ToString();
+			mStaticPackage.totalCount = data[18] * 256 + data[19];
+			mStaticPackage.currentCount = data[20] * 256 + data[21];
+			mStaticPackage.totalSize = BitConverter.ToUInt32(data, 22);
+			mStaticPackage.startIndex = BitConverter.ToUInt32(data, 26);
+			mStaticPackage.content = new byte[data[16] * 256 + data[17]];
+
+			for (int i = 0; i < mStaticPackage.content.Length; i++)
+			{
+				mStaticPackage.content[i] = data[30 + i];
+			}
+			return mStaticPackage;
+		}
+
+
     }
 
 
