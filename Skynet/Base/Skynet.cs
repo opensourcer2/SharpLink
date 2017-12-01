@@ -36,7 +36,6 @@ namespace Skynet.Base
         private object sendLock = new object();
         private object reqListnerLock = new object();
         private Queue<Package> reqQueue = new Queue<Package>();
-        private object reqQueueLock = new object();
 		private Queue<byte[]> friendMessageQueue = new Queue<byte[]> ();
 		private object friendMessageLock = new object ();
 
@@ -150,14 +149,13 @@ namespace Skynet.Base
                                     await client.PostAsJsonAsync("http://xiaoqiang.bwbot.org/v2/online", minfo);
                                 }
                         }
+						
+						processFriendMessage();
                         Package processPack = null;
-                        lock (reqQueueLock)
-                        {
-                            if (reqQueue.Count > 0)
-                            {
-                                processPack = reqQueue.Dequeue();
-                            }
-                        }
+                        if (reqQueue.Count > 0)
+						{
+                            processPack = reqQueue.Dequeue();
+						}
                         if (processPack != null)
                         {
                             newReqReceived(processPack);
@@ -219,53 +217,6 @@ namespace Skynet.Base
 			}
         }
 
-		void processFriendMessage(){
-			byte[] message = null;
-			lock (friendMessageLock) {
-				if (friendMessageQueue.Count > 0)
-					message = friendMessageQueue.Dequeue ();
-			}
-			if (message == null)
-				return;
-			byte[] receivedData = new byte[message.Length - 1];
-			for (int i = 0; i < receivedData.Length; i++) {
-				receivedData [i] = message [i + 1];
-			}
-			Package receivedPackage = Package.fromBytes(receivedData);
-			if (receivedPackage.currentCount == 0)
-			{
-				if (receivedPackage.totalCount == 1)
-				{
-					lock (reqQueueLock)
-					{
-						reqQueue.Enqueue(Package.fromBytes(receivedData));
-					}
-					return;
-				}
-				byte[] fullSizeContent = new byte[receivedPackage.totalSize];
-				receivedPackage.content.CopyTo(fullSizeContent, 0);
-				lock (mPackageCacheLock)
-				{
-					mPackageCache.Add(receivedPackage.uuid, fullSizeContent);
-				}
-
-			}
-			else if (receivedPackage.currentCount != receivedPackage.totalCount - 1)
-			{
-				lock (mPackageCacheLock)
-				{
-					receivedPackage.content.CopyTo(mPackageCache[receivedPackage.uuid], receivedPackage.startIndex);
-				}
-			}
-			else if (receivedPackage.currentCount == receivedPackage.totalCount - 1)
-			{
-				lock (reqQueueLock)
-				{
-					reqQueue.Enqueue(Package.fromBytes(receivedData));
-				}
-			}
-		}
-
         void tox_OnFriendRequestReceived(object sender, ToxEventArgs.FriendRequestEventArgs e)
         {
             //automatically accept every friend request we receive
@@ -297,6 +248,48 @@ namespace Skynet.Base
                 });
             }
         }
+
+		void processFriendMessage(){
+			byte[] message = null;
+			lock (friendMessageLock) {
+				if (friendMessageQueue.Count > 0)
+					message = friendMessageQueue.Dequeue ();
+			}
+			if (message == null)
+				return;
+			byte[] receivedData = new byte[message.Length - 1];
+			for (int i = 0; i < receivedData.Length; i++) {
+				receivedData [i] = message [i + 1];
+			}
+			Package receivedPackage = Package.fromBytes(receivedData);
+			if (receivedPackage.currentCount == 0)
+			{
+				if (receivedPackage.totalCount == 1)
+				{
+				    reqQueue.Enqueue(Package.fromBytes(receivedData));
+					return ;
+				}
+				byte[] fullSizeContent = new byte[receivedPackage.totalSize];
+				receivedPackage.content.CopyTo(fullSizeContent, 0);
+				lock (mPackageCacheLock)
+				{
+					mPackageCache.Add(receivedPackage.uuid, fullSizeContent);
+				}
+
+			}
+			else if (receivedPackage.currentCount != receivedPackage.totalCount - 1)
+			{
+				lock (mPackageCacheLock)
+				{
+					receivedPackage.content.CopyTo(mPackageCache[receivedPackage.uuid], receivedPackage.startIndex);
+				}
+			}
+			else if (receivedPackage.currentCount == receivedPackage.totalCount - 1)
+			{
+				reqQueue.Enqueue(Package.fromBytes(receivedData));
+			}
+			return;
+		}
 
         public bool sendResponse(ToxResponse res, ToxId toxid)
         {
