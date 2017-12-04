@@ -8,6 +8,7 @@ using System.Net;
 using Skynet.Models;
 using System.Threading;
 using Skynet.Utils;
+using System.Diagnostics;
 
 namespace SharpLink
 {
@@ -46,7 +47,7 @@ namespace SharpLink
                 // if idle for 600s, shutdown
                 while (runningFlag && (long)(DateTime.UtcNow - lastActiveTime).TotalMilliseconds < 600 * 1000)
                 {
-                    mReq = getRequestToSend();
+					          mReq = getRequestToSend();
                     if (mReq != null && msgHandler != null)
                     {
                         lastActiveTime = DateTime.UtcNow;
@@ -55,7 +56,7 @@ namespace SharpLink
                         var response = mReq.createResponse(Encoding.UTF8.GetBytes("OK"));
                         mSkynet.sendResponse(response, new ToxId(response.toToxId));
                     }
-                    else
+						        if(mReq != null)
                         Thread.Sleep(1);
                 }
             });

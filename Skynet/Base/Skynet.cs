@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Net.Http;
+using System.Diagnostics;
 
 
 namespace Skynet.Base
@@ -35,7 +36,6 @@ namespace Skynet.Base
         private Dictionary<string, Action<ToxRequest>> reqCallbacks = new Dictionary<string, Action<ToxRequest>>();
         private object sendLock = new object();
         private object reqListnerLock = new object();
-        private Queue<Package> reqQueue = new Queue<Package>();
 		private Queue<byte[]> friendMessageQueue = new Queue<byte[]> ();
 		private object friendMessageLock = new object ();
 
@@ -89,7 +89,7 @@ namespace Skynet.Base
                             using (var client = new HttpClient())
                             {
                                 ClientInfo minfo = new ClientInfo(tox.Id.ToString(), Utils.Utils.GetLocalIPAddress());
-                                await client.PostAsJsonAsync("http://xiaoqiang.bwbot.org/v2/online", minfo);
+                                //await client.PostAsJsonAsync("http://xiaoqiang.bwbot.org/v2/online", minfo);
                             }
                         break;
                     }
@@ -146,22 +146,10 @@ namespace Skynet.Base
                                 using (var client = new HttpClient())
                                 {
                                     ClientInfo minfo = new ClientInfo(tox.Id.ToString(), Utils.Utils.GetLocalIPAddress());
-                                    await client.PostAsJsonAsync("http://xiaoqiang.bwbot.org/v2/online", minfo);
+                                    //await client.PostAsJsonAsync("http://xiaoqiang.bwbot.org/v2/online", minfo);
                                 }
                         }
-						
-						processFriendMessage();
-                        Package processPack = null;
-                        if (reqQueue.Count > 0)
-						{
-                            processPack = reqQueue.Dequeue();
-						}
-                        if (processPack != null)
-                        {
-                            newReqReceived(processPack);
-                        }
-                        else
-                            Thread.Sleep(1);
+						                    processFriendMessage();
                     }
                     Utils.Utils.Log("Event: tox is offline", true);
                     onlineStatus = false;
@@ -256,7 +244,11 @@ namespace Skynet.Base
 					message = friendMessageQueue.Dequeue ();
 			}
 			if (message == null)
+			{
+				Thread.Sleep(1);
 				return;
+			}
+
 			byte[] receivedData = new byte[message.Length - 1];
 			for (int i = 0; i < receivedData.Length; i++) {
 				receivedData [i] = message [i + 1];
@@ -266,7 +258,7 @@ namespace Skynet.Base
 			{
 				if (receivedPackage.totalCount == 1)
 				{
-				    reqQueue.Enqueue(Package.fromBytes(receivedData));
+					newReqReceived(Package.fromBytes(receivedData));
 					return ;
 				}
 				byte[] fullSizeContent = new byte[receivedPackage.totalSize];
@@ -286,7 +278,7 @@ namespace Skynet.Base
 			}
 			else if (receivedPackage.currentCount == receivedPackage.totalCount - 1)
 			{
-				reqQueue.Enqueue(Package.fromBytes(receivedData));
+				newReqReceived(Package.fromBytes(receivedData));
 			}
 			return;
 		}
@@ -429,6 +421,7 @@ namespace Skynet.Base
                         Console.WriteLine(Utils.Utils.UnixTimeNow() + " Event: " + mesError);
                         if (mesError == ToxErrorFriendCustomPacket.SendQ)
                         {
+							              Console.WriteLine("SendQ");
                             Thread.Sleep(20);
                             continue;
                         }
@@ -584,8 +577,8 @@ namespace Skynet.Base
                     int timeoutCount = 0;
                     while (timeoutCount < timeout * 1000)
                     {
-                        Thread.Sleep(100);
-                        timeoutCount += 100;
+                        Thread.Sleep(1);
+                        timeoutCount += 1;
                         lock (mPendingReqLock)
                         {
                             if (!mPendingReqList.Keys.Contains(req.uuid))

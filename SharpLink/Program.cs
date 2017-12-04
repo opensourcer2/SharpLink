@@ -10,6 +10,7 @@ using System.Threading;
 using System.IO;
 using Skynet.Utils;
 using System.Reflection;
+using System.Diagnostics;
 
 namespace SharpLink
 {
@@ -145,7 +146,7 @@ namespace SharpLink
                             {
                                 while (true)
                                 {
-                                    byte[] buf = new byte[1024 * 512];
+									                  byte[] buf = new byte[32 * 1024];
                                     try
                                     {
                                         int size = 0;
@@ -187,7 +188,7 @@ namespace SharpLink
                                             break;
                                         }
                                         if (mlink != null)
-                                        {
+										                    {
                                             var res = mlink.Send(buf, size);
                                             if (!res && !closeFlag && clientSocket.Connected)
                                             {
@@ -208,7 +209,6 @@ namespace SharpLink
                                                 break;
                                             }
                                         }
-
                                     }
                                     catch (Exception e)
                                     {
@@ -330,7 +330,7 @@ namespace SharpLink
 
             mSkynet.addNewReqListener("", (req) =>
             {
-                // handle 
+                // handle
                 if (req.toNodeId == "" && req.url == "/connect")
                 {
                     Utils.Log("Event: Task Connect to " + req.fromNodeId + ", MessageId: " + req.uuid);
