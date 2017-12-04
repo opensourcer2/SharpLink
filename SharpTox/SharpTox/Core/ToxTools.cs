@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using System.Diagnostics;
 
 namespace SharpTox.Core
 {
@@ -70,6 +71,17 @@ namespace SharpTox.Core
         internal static int Map(uint i)
         {
             return unchecked((int)i);
+        }
+        
+        public static void NOP(double durationSeconds)
+        {
+            var durationTicks = Math.Round(durationSeconds * Stopwatch.Frequency);
+            var sw = Stopwatch.StartNew();
+        
+            while (sw.ElapsedTicks < durationTicks)
+            {
+        
+            }
         }
     }
 }

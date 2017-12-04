@@ -47,14 +47,16 @@ namespace SharpLink
                 // if idle for 600s, shutdown
                 while (runningFlag && (long)(DateTime.UtcNow - lastActiveTime).TotalMilliseconds < 600 * 1000)
                 {
-					          mReq = getRequestToSend();
+                    mReq = getRequestToSend();
                     if (mReq != null && msgHandler != null)
                     {
                         lastActiveTime = DateTime.UtcNow;
+                        Utils.Log("Event: Received Message Start, ClientId: " + clientId + ", MessageId: " + mReq.uuid);
                         msgHandler(mReq.content);
                         Utils.Log("Event: Received Message Complete, ClientId: " + clientId + ", MessageId: " + mReq.uuid);
                         var response = mReq.createResponse(Encoding.UTF8.GetBytes("OK"));
                         mSkynet.sendResponse(response, new ToxId(response.toToxId));
+                        Utils.Log("Event: Send Response Complete reqId: " + mReq.uuid);
                     }
 						        if(mReq != null)
                         Thread.Sleep(1);
@@ -179,12 +181,33 @@ namespace SharpLink
                 time = Utils.UnixTimeNow(),
                 content = msg.Take(size).ToArray(),
             }, out status, 1000).GetAwaiter().GetResult();
+            Utils.Log("Event: Send Message Complete, ClientId: " + clientId + ", ReqId: " + msgGuidStr);
             if (!status && errorHander != null)
                 errorHander(new Exception("send message failed"));
             if (res == null)
                 return false;
             else
                 return true;
+        }
+        
+        public Task<ToxResponse> SendAsync(byte[] msg, int size)
+        {
+            lastActiveTime = DateTime.UtcNow;
+            string msgGuidStr = Guid.NewGuid().ToString();
+            Utils.Log("Event: Send Message, ClientId: " + clientId + ", ReqId: " + msgGuidStr);
+            bool status;
+            return mSkynet.sendRequest(new ToxId(targetToxId), new ToxRequest
+            {
+                url = "/msg",
+                method = "get",
+                uuid = msgGuidStr,
+                fromNodeId = clientId,
+                fromToxId = mSkynet.tox.Id.ToString(),
+                toToxId = targetToxId,
+                toNodeId = serverId,
+                time = Utils.UnixTimeNow(),
+                content = msg.Take(size).ToArray(),
+            }, out status, 1000);
         }
 
         public bool Send(byte[] msg, int size, int retryCount)
@@ -236,6 +259,7 @@ namespace SharpLink
             // 把变量保存至本地
             lock (messageQueueLock)
             {
+                Utils.Log("Event: sendRequestLocal " + req.uuid);
                 messageQueue.Enqueue(req);
             }
         }

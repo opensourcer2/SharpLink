@@ -10,7 +10,7 @@ using ProtoBuf;
 namespace Skynet.Models
 {
 	[ProtoContract]
-    class Package
+    public class Package
     {
 		[ProtoMember(1)]
         public string uuid { get; set; } // 36 bytes string 

@@ -11,6 +11,7 @@ using System.IO;
 using Skynet.Utils;
 using System.Reflection;
 using System.Diagnostics;
+using Skynet.Models;
 
 namespace SharpLink
 {
@@ -142,11 +143,13 @@ namespace SharpLink
                             bool closeFlag = false;
                             LinkClient mlink = null;
                             string tempConnectId = Guid.NewGuid().ToString();
-                            Task.Factory.StartNew(() =>
+                            Task.Factory.StartNew(async () =>
                             {
+                                Task<ToxResponse> sendTask = null;
+                                ToxResponse sendRes = null;
                                 while (true)
                                 {
-									                  byte[] buf = new byte[32 * 1024];
+									byte[] buf = new byte[32 * 1024];
                                     try
                                     {
                                         int size = 0;
@@ -188,9 +191,10 @@ namespace SharpLink
                                             break;
                                         }
                                         if (mlink != null)
-										                    {
-                                            var res = mlink.Send(buf, size);
-                                            if (!res && !closeFlag && clientSocket.Connected)
+                                        {
+                                            if(sendTask != null)
+                                                sendRes = await sendTask;
+                                            if (sendRes == null && !closeFlag && clientSocket.Connected)
                                             {
                                                 closeFlag = true;
                                                 try
@@ -208,6 +212,9 @@ namespace SharpLink
                                                 Utils.Log("Event: Close Connection, ClientId: " + mlink.clientId + ", ConnectId: " + tempConnectId);
                                                 break;
                                             }
+                                            Utils.Log("Event: LinkClient Start Send Data");
+                                            sendTask = mlink.SendAsync(buf, size);
+                                            Utils.Log("Event: LinkClient Stop Send Data");
                                         }
                                     }
                                     catch (Exception e)
@@ -248,7 +255,6 @@ namespace SharpLink
                                 {
                                     try
                                     {
-
                                         if (clientSocket != null && clientSocket.Connected)
                                             clientSocket.Send(msg, SocketFlags.None);
                                     }
@@ -404,11 +410,13 @@ namespace SharpLink
                             });
                             // send response after all handler has been set
                             mSkynet.sendResponse(req.createResponse(Encoding.UTF8.GetBytes("OK")), new ToxId(req.fromToxId));
-                            Task.Factory.StartNew(() =>
+                            Task.Factory.StartNew(async () =>
                             {
+                                Task<ToxResponse> sendTask = null;
+                                ToxResponse sendRes = null;
                                 while (true)
                                 {
-                                    byte[] buf = new byte[1024 * 512];
+                                    byte[] buf = new byte[1024 * 32];
                                     try
                                     {
                                         Utils.Log("Event: Start Read Data, Clientid: " + mlink.clientId);
@@ -446,8 +454,12 @@ namespace SharpLink
                                         {
                                             Utils.Log("Event: Read Data " + size + ", Clientid: " + mlink.clientId);
                                         }
-                                        var res = mlink.Send(buf, size);
-                                        if (!res)
+                                        
+                                        
+                                        if(sendTask != null){
+                                            sendRes = await sendTask;
+                                        }
+                                        if (sendRes == null)
                                         {
                                             // send failed
                                             if (!closeFlag && mClientSocket.Connected)
@@ -467,6 +479,7 @@ namespace SharpLink
                                                 break;
                                             }
                                         }
+                                        sendTask = mlink.SendAsync(buf, size);
                                     }
                                     catch (Exception e)
                                     {

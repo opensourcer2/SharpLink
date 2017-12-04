@@ -36,8 +36,8 @@ namespace Skynet.Base
         private Dictionary<string, Action<ToxRequest>> reqCallbacks = new Dictionary<string, Action<ToxRequest>>();
         private object sendLock = new object();
         private object reqListnerLock = new object();
-		private Queue<byte[]> friendMessageQueue = new Queue<byte[]> ();
-		private object friendMessageLock = new object ();
+		    private Queue<byte[]> friendMessageQueue = new Queue<byte[]> ();
+		    private object friendMessageLock = new object ();
 
 
         public static List<Skynet> allInstance = new List<Skynet>();
@@ -254,6 +254,9 @@ namespace Skynet.Base
 				receivedData [i] = message [i + 1];
 			}
 			Package receivedPackage = Package.fromBytes(receivedData);
+      Utils.Utils.Log("Event: receivedPackage PackageId: " + receivedPackage.uuid +
+        " totalNum: " + receivedPackage.totalCount + 
+        " currentNum: " + receivedPackage.currentCount);
 			if (receivedPackage.currentCount == 0)
 			{
 				if (receivedPackage.totalCount == 1)
@@ -316,6 +319,7 @@ namespace Skynet.Base
 
         void newReqReceived(Package receivedPackage)
         {
+            Utils.Utils.Log("Event: newReqReceived reqId: " + receivedPackage.uuid);
             byte[] mcontentCache = new byte[receivedPackage.totalSize];
             lock (mPackageCacheLock)
             {
@@ -331,6 +335,7 @@ namespace Skynet.Base
             {
                 if (mPendingReqList.ContainsKey(receivedPackage.uuid))
                 {
+                    Utils.Utils.Log("Event: newResponse Received reqId: " + receivedPackage.uuid);
                     mPendingReqList[receivedPackage.uuid](ToxResponse.fromBytes(mcontentCache));
                     mPendingReqList.Remove(receivedPackage.uuid);
                     return;
@@ -348,7 +353,7 @@ namespace Skynet.Base
                 Utils.Utils.Log("Event: Invalid Request Data: receivedPackage " + receivedPackage.uuid);
                 return;
             }
-            Utils.Utils.Log("Event: Start callbacks");
+            Utils.Utils.Log("Event: Start callbacks reqId: " + newReq.uuid);
             Utils.Utils.Log("Event: Begin Process MessageID: " + newReq.uuid);
             if (newReq.url == "/msg")
                 Utils.Utils.Log("Event: Message toNodeID: " + newReq.toNodeId + ", totoxid:" + newReq.toToxId);
@@ -365,6 +370,18 @@ namespace Skynet.Base
         public bool sendMsg(ToxKey toxkey, byte[] msg, int timeout = 20)
         {
             return sendMsg(new ToxId(toxkey.GetBytes(), 100), msg, timeout);
+        }
+
+        public bool sendMsgDebug(ToxId toxid, Package mPackage, int timeout = 20)
+        {
+            Utils.Utils.Log("Event: Start Send Msg Req ID: " 
+              + mPackage.uuid + " totalNum: " + mPackage.totalCount 
+              + " currentNum: " + mPackage.currentCount);
+            var res = sendMsg(toxid, mPackage.toBytes(), timeout);
+            Utils.Utils.Log("Event: End Send Msg Req ID: " 
+              + mPackage.uuid + " totalNum: " + mPackage.totalCount 
+              + " currentNum: " + mPackage.currentCount);
+            return res;
         }
 
         public bool sendMsg(ToxId toxid, byte[] msg, int timeout = 20)
@@ -421,7 +438,6 @@ namespace Skynet.Base
                         Console.WriteLine(Utils.Utils.UnixTimeNow() + " Event: " + mesError);
                         if (mesError == ToxErrorFriendCustomPacket.SendQ)
                         {
-							              Console.WriteLine("SendQ");
                             Thread.Sleep(20);
                             continue;
                         }
@@ -475,7 +491,7 @@ namespace Skynet.Base
                     mcontent = Utils.Utils.subArray(reqContent, i * MAX_MSG_LENGTH);
                 else
                     mcontent = Utils.Utils.subArray(reqContent, i * MAX_MSG_LENGTH, MAX_MSG_LENGTH);
-                res = sendMsg(toxid, new Package
+                res = sendMsgDebug(toxid, new Package
                 {
                     uuid = req.uuid,
                     totalCount = packageNum,
@@ -483,7 +499,7 @@ namespace Skynet.Base
                     content = mcontent,
                     totalSize = (uint)reqContent.Length,
                     startIndex = (uint)(i * MAX_MSG_LENGTH),
-                }.toBytes());
+                });
                 if (!res)
                 {
                     status = false;
@@ -542,7 +558,7 @@ namespace Skynet.Base
                     mcontent = Utils.Utils.subArray(reqContent, i * MAX_MSG_LENGTH);
                 else
                     mcontent = Utils.Utils.subArray(reqContent, i * MAX_MSG_LENGTH, MAX_MSG_LENGTH);
-                res = sendMsg(toxid, new Package
+                res = sendMsgDebug(toxid, new Package
                 {
                     uuid = req.uuid,
                     totalCount = packageNum,
@@ -550,7 +566,7 @@ namespace Skynet.Base
                     content = mcontent,
                     totalSize = (uint)reqContent.Length,
                     startIndex = (uint)(i * MAX_MSG_LENGTH),
-                }.toBytes(), timeout);
+                }, timeout);
 
                 if (!res)
                 {
@@ -588,7 +604,7 @@ namespace Skynet.Base
                             }
                         }
                     }
-                    Console.WriteLine(Utils.Utils.UnixTimeNow() + " Timeout Happends");
+                    Console.WriteLine(Utils.Utils.UnixTimeNow() + " Timeout Happends ReqId: " + req.uuid);
                     lock (mPendingReqLock)
                     {
                         if (mPendingReqList.Keys.Contains(req.uuid))
