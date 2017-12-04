@@ -194,7 +194,7 @@ namespace SharpLink
                                         {
                                             if(sendTask != null)
                                                 sendRes = await sendTask;
-                                            if (sendRes == null && !closeFlag && clientSocket.Connected)
+                                            if (sendTask != null && sendRes == null && !closeFlag && clientSocket.Connected)
                                             {
                                                 closeFlag = true;
                                                 try
@@ -459,7 +459,7 @@ namespace SharpLink
                                         if(sendTask != null){
                                             sendRes = await sendTask;
                                         }
-                                        if (sendRes == null)
+                                        if (sendTask != null && sendRes == null)
                                         {
                                             // send failed
                                             if (!closeFlag && mClientSocket.Connected)
