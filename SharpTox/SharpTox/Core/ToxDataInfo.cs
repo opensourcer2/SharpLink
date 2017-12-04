@@ -31,7 +31,9 @@ namespace SharpTox.Core
         /// </summary>
         public ToxKey SecretKey { get; private set; }
 
-        private ToxDataInfo() { }
+        private ToxDataInfo()
+        {
+        }
 
         internal static ToxDataInfo FromToxData(ToxData data)
         {
@@ -71,15 +73,19 @@ namespace SharpTox.Core
                                 secretKey = reader.ReadBytes(ToxConstants.SecretKeySize);
                                 id = new ToxId(publicKey, nospam);
                                 break;
+
                             case StateType.Name:
                                 name = Encoding.UTF8.GetString(reader.ReadBytes((int)length), 0, (int)length);
                                 break;
+
                             case StateType.StatusMessage:
                                 statusMessage = Encoding.UTF8.GetString(reader.ReadBytes((int)length), 0, (int)length);
                                 break;
+
                             case StateType.Status:
                                 status = (ToxUserStatus)reader.ReadByte();
                                 break;
+
                             default:
                             case StateType.Dht:
                             case StateType.Friends:
@@ -87,6 +93,7 @@ namespace SharpTox.Core
                             case StateType.PathNode:
                                 stream.Position += length; //skip this
                                 break;
+
                             case StateType.Corrupt:
                                 throw new Exception("This Tox save file is corrupt");
                         }

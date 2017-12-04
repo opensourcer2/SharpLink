@@ -13,12 +13,14 @@ namespace SharpTox.Av
     public class ToxAv : IDisposable
     {
         #region Callback delegates
+
         private ToxAvDelegates.CallCallback _onCallCallback;
         private ToxAvDelegates.CallStateCallback _onCallStateCallback;
         private ToxAvDelegates.AudioReceiveFrameCallback _onReceiveAudioFrameCallback;
         private ToxAvDelegates.VideoReceiveFrameCallback _onReceiveVideoFrameCallback;
         private ToxAvDelegates.BitrateStatusCallback _onBitrateStatusCallback;
-        #endregion
+
+        #endregion Callback delegates
 
         private List<ToxAvDelegates.GroupAudioReceiveCallback> _groupAudioHandlers = new List<ToxAvDelegates.GroupAudioReceiveCallback>();
         private bool _disposed = false;
@@ -366,6 +368,7 @@ namespace SharpTox.Av
         }
 
         #region Events
+
         private EventHandler<ToxAvEventArgs.CallRequestEventArgs> _onCallRequestReceived;
 
         /// <summary>
@@ -483,7 +486,7 @@ namespace SharpTox.Av
         /// </summary>
         public event EventHandler<ToxAvEventArgs.GroupAudioDataEventArgs> OnReceivedGroupAudio;
 
-        #endregion
+        #endregion Events
 
         private void ThrowIfDisposed()
         {

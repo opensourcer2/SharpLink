@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using ProtoBuf;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ProtoBuf;
 
 namespace Skynet.Models
 {
@@ -13,16 +8,22 @@ namespace Skynet.Models
     {
         [ProtoMember(1)]
         public string url { get; set; }
+
         [ProtoMember(2)]
         public string uuid { get; set; }
+
         [ProtoMember(3)]
         public byte[] content { get; set; }
+
         [ProtoMember(4)]
         public string fromNodeId { get; set; }
+
         [ProtoMember(5)]
         public string fromToxId { get; set; }
+
         [ProtoMember(6)]
         public string toNodeId { get; set; }
+
         [ProtoMember(7)]
         public string toToxId { get; set; }
 

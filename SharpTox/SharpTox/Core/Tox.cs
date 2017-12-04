@@ -1,8 +1,8 @@
-﻿using System;
+﻿using SharpTox.Encryption;
+using System;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using SharpTox.Encryption;
 
 namespace SharpTox.Core
 {
@@ -18,6 +18,7 @@ namespace SharpTox.Core
         private bool _disposed = false;
 
         #region Callback delegates
+
         private ToxDelegates.CallbackFriendRequestDelegate _onFriendRequestCallback;
         private ToxDelegates.CallbackFriendMessageDelegate _onFriendMessageCallback;
         private ToxDelegates.CallbackNameChangeDelegate _onNameChangeCallback;
@@ -38,7 +39,8 @@ namespace SharpTox.Core
         private ToxDelegates.CallbackGroupMessageDelegate _onGroupMessageCallback;
         private ToxDelegates.CallbackGroupNamelistChangeDelegate _onGroupNamelistChangeCallback;
         private ToxDelegates.CallbackGroupTitleDelegate _onGroupTitleCallback;
-        #endregion
+
+        #endregion Callback delegates
 
         /// <summary>
         /// Options that are used for this instance of Tox.
@@ -176,7 +178,7 @@ namespace SharpTox.Core
         }
 
         /// <summary>
-        /// The handle of this instance of Tox. 
+        /// The handle of this instance of Tox.
         /// Do not dispose this handle manually, use the Dispose method in this class instead.
         /// </summary>
         internal ToxHandle Handle
@@ -459,7 +461,7 @@ namespace SharpTox.Core
         }
 
         /// <summary>
-        /// Adds a node as a TCP relay. 
+        /// Adds a node as a TCP relay.
         /// This method can be used to initiate TCP connections to different ports on the same bootstrap node, or to add TCP relays without using them as bootstrap nodes.
         /// </summary>
         /// <param name="node">The node to add.</param>
@@ -477,7 +479,7 @@ namespace SharpTox.Core
         }
 
         /// <summary>
-        /// Adds a node as a TCP relay. 
+        /// Adds a node as a TCP relay.
         /// This method can be used to initiate TCP connections to different ports on the same bootstrap node, or to add TCP relays without using them as bootstrap nodes.
         /// </summary>
         /// <param name="node">The node to add.</param>
@@ -1149,7 +1151,7 @@ namespace SharpTox.Core
         }
 
         /// <summary>
-        /// Sends a custom lossy packet to a friend. 
+        /// Sends a custom lossy packet to a friend.
         /// Lossy packets are like UDP packets, they may never reach the other side, arrive more than once or arrive in the wrong order.
         /// </summary>
         /// <param name="friendNumber">The friend to send the packet to.</param>
@@ -1169,7 +1171,7 @@ namespace SharpTox.Core
         }
 
         /// <summary>
-        /// Sends a custom lossy packet to a friend. 
+        /// Sends a custom lossy packet to a friend.
         /// Lossy packets are like UDP packets, they may never reach the other side, arrive more than once or arrive in the wrong order.
         /// </summary>
         /// <param name="friendNumber">The friend to send the packet to.</param>
@@ -1461,6 +1463,7 @@ namespace SharpTox.Core
         }
 
         #region Events
+
         private EventHandler<ToxEventArgs.FriendRequestEventArgs> _onFriendRequestReceived;
 
         /// <summary>
@@ -2142,7 +2145,7 @@ namespace SharpTox.Core
             }
         }
 
-        #endregion
+        #endregion Events
 
         private void ThrowIfDisposed()
         {

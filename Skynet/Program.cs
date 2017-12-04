@@ -1,22 +1,13 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using Newtonsoft.Json;
 using Skynet.Models;
-using System.Collections.Generic;
-using SharpTox.Core;
-using Skynet.Base.Contollers;
-using Newtonsoft.Json;
-using System.Threading;
-using System.Text;
-using System.Net;
-using System.IO;
-using Skynet.Base;
+using System;
+using System.Threading.Tasks;
 
 namespace Skynet
 {
-    class Program
+    internal class Program
     {
-
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             Base.Skynet mSkynet = new Base.Skynet();
             Base.Skynet mSkynet2 = new Base.Skynet();

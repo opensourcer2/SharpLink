@@ -1,7 +1,5 @@
 ﻿using Newtonsoft.Json;
-using SharpTox.Core;
 using Skynet.Base;
-using Skynet.Base.Contollers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,6 +27,7 @@ namespace Skynet.Models
 
         // modify times
         public long grandParentsModifiedTime = 0;
+
         public long parentModifiedTime = 0;
         public long childNodesModifiedTime = 0;
         public long brotherModifiedTime = 0;
@@ -53,7 +52,9 @@ namespace Skynet.Models
                 });
         }
 
-        public Node(Base.Skynet skynet) : this(new List<NodeId>() { }, skynet) { }
+        public Node(Base.Skynet skynet) : this(new List<NodeId>() { }, skynet)
+        {
+        }
 
         /// <summary>
         /// get the quality of the node based on bandwidth, uptime, disk storage size etc
@@ -71,7 +72,6 @@ namespace Skynet.Models
         /// </summary>
         public void changePostion()
         {
-
         }
 
         /// <summary>
@@ -150,7 +150,6 @@ namespace Skynet.Models
                     if (!checkedNodesList.Contains<NodeId>(parentNode))
                         checkedNodesList.Add(parentNode);
                 }
-
             }
 
             if (target != null)

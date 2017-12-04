@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Text;
 using System.Runtime.InteropServices;
 
 namespace SharpTox.Dns
@@ -9,7 +8,7 @@ namespace SharpTox.Dns
 #if POSIX
 		const string dll = "libtoxdns.so";
 #else
-        const string dll = "libtox";
+        private const string dll = "libtox";
 #endif
 
         [DllImport(dll, CallingConvention = CallingConvention.Cdecl, EntryPoint = "tox_dns3_new")]

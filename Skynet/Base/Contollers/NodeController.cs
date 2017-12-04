@@ -1,12 +1,7 @@
 ﻿using Newtonsoft.Json;
-using SharpTox.Core;
 using Skynet.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Web.Http;
 
 namespace Skynet.Base.Contollers
@@ -78,7 +73,6 @@ namespace Skynet.Base.Contollers
         [HttpDelete]
         public NodeResponse Delete(string nodeId)
         {
-
             // check if a valid nodeid
             if (!Utils.Utils.isValidGuid(nodeId))
             {

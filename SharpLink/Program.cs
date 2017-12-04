@@ -1,17 +1,16 @@
-﻿using System;
+﻿using SharpTox.Core;
+using Skynet.Models;
+using Skynet.Utils;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Net;
 using System.Net.Sockets;
-using SharpTox.Core;
-using System.Threading;
-using System.IO;
-using Skynet.Utils;
 using System.Reflection;
-using System.Diagnostics;
-using Skynet.Models;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace SharpLink
 {
@@ -27,13 +26,12 @@ namespace SharpLink
         }
     }
 
-    class Program
+    internal class Program
     {
-
         private static bool runningFlag = true;
         public static bool IsConnected = false;
 
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             if (args.Length != 4 && args.Length != 0)
             {
@@ -106,25 +104,27 @@ namespace SharpLink
                     while (runningFlag)
                     {
                         IsConnected = mSkynet.HandShake(new ToxId(targetToxId)).GetAwaiter().GetResult();
-                        if (!IsConnected) {
+                        if (!IsConnected)
+                        {
                             var toxid = new ToxId(targetToxId);
                             ToxKey toxkey = toxid.PublicKey;
                             int friendNum = mSkynet.tox.GetFriendByPublicKey(toxkey);
-                            if (friendNum != -1 && disconnectCount > 15) { // wait 150s
+                            if (friendNum != -1 && disconnectCount > 15)
+                            { // wait 150s
                                 Utils.Log("delete friend " + targetToxId);
                                 Console.WriteLine("delete friend " + targetToxId);
                                 disconnectCount = 0;
                                 mSkynet.DeleteFriend(friendNum);
                             }
                             disconnectCount += 1;
-                        }else
+                        }
+                        else
                         {
                             disconnectCount = 0;
                         }
                         Thread.Sleep(10 * 1000);
                     }
                 });
-
 
                 // create local socket server
                 IPAddress ip = IPAddress.Parse("0.0.0.0");
@@ -149,7 +149,7 @@ namespace SharpLink
                                 ToxResponse sendRes = null;
                                 while (true)
                                 {
-									byte[] buf = new byte[32 * 1024];
+                                    byte[] buf = new byte[32 * 1024];
                                     try
                                     {
                                         int size = 0;
@@ -192,7 +192,7 @@ namespace SharpLink
                                         }
                                         if (mlink != null)
                                         {
-                                            if(sendTask != null)
+                                            if (sendTask != null)
                                                 sendRes = await sendTask;
                                             if (sendTask != null && sendRes == null && !closeFlag && clientSocket.Connected)
                                             {
@@ -246,7 +246,6 @@ namespace SharpLink
                                         }
                                         break;
                                     }
-
                                 }
                             }, TaskCreationOptions.LongRunning).ForgetOrThrow();
                             mlink = LinkClient.Connect(mSkynet, targetToxId, IPAddress.Parse(targetIP), Convert.ToInt32(targetPort),
@@ -454,9 +453,9 @@ namespace SharpLink
                                         {
                                             Utils.Log("Event: Read Data " + size + ", Clientid: " + mlink.clientId);
                                         }
-                                        
-                                        
-                                        if(sendTask != null){
+
+                                        if (sendTask != null)
+                                        {
                                             sendRes = await sendTask;
                                         }
                                         if (sendTask != null && sendRes == null)

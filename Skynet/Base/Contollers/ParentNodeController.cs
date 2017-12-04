@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web.Http;
 
@@ -41,14 +40,12 @@ namespace Skynet.Base.Contollers
                 value = JsonConvert.SerializeObject(targetNode.parent),
                 time = targetNode.grandParentsModifiedTime,
             };
-
         }
 
         [Route("api/node/{nodeId}/parent")]
         [HttpPut, HttpPatch]
         public NodeResponse Put(string nodeId, [FromBody] NodeId values)
         {
-
             IEnumerable<string> requestTime = new List<string>();
             if (!Request.Headers.TryGetValues("Skynet-Time", out requestTime))
             {

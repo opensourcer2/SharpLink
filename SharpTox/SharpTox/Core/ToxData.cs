@@ -1,8 +1,6 @@
 ﻿using SharpTox.Encryption;
-using System;
 using System.IO;
 using System.Linq;
-using System.Text;
 
 namespace SharpTox.Core
 {
@@ -54,6 +52,7 @@ namespace SharpTox.Core
         }
 
 #if !IS_PORTABLE
+
         /// <summary>
         /// Saves this Tox data to the disk with the specified filename.
         /// </summary>
@@ -101,6 +100,7 @@ namespace SharpTox.Core
 
             return FromBytes(bytes);
         }
+
 #endif
 
         /// <summary>

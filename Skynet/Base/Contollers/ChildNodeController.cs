@@ -96,7 +96,6 @@ namespace Skynet.Base.Contollers
         [HttpPost]
         public NodeResponse Post(string nodeId, [FromBody]NodeId newNode)
         {
-
             IEnumerable<string> requestTime = new List<string>();
             if (!Request.Headers.TryGetValues("Skynet-Time", out requestTime))
             {
@@ -177,7 +176,6 @@ namespace Skynet.Base.Contollers
         [HttpDelete]
         public NodeResponse Delete(string nodeId, string childNodeId)
         {
-
             IEnumerable<string> requestTime = new List<string>();
             if (!Request.Headers.TryGetValues("Skynet-Time", out requestTime))
             {
@@ -255,7 +253,6 @@ namespace Skynet.Base.Contollers
         [HttpPut]
         public NodeResponse Put(string nodeId, string childNodeId, [FromBody] NodeId newNode)
         {
-
             IEnumerable<string> requestTime = new List<string>();
             if (!Request.Headers.TryGetValues("Skynet-Time", out requestTime))
             {
@@ -353,6 +350,5 @@ namespace Skynet.Base.Contollers
                 });
             });
         }
-
     }
 }

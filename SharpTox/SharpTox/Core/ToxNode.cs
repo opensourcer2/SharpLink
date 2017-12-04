@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Net;
-
-namespace SharpTox.Core
+﻿namespace SharpTox.Core
 {
     /// <summary>
     /// Represents a tox node.

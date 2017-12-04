@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace SharpTox.Core
 {
     public class ToxEventArgs
     {
         #region Base Classes
+
         public abstract class FriendBaseEventArgs : EventArgs
         {
             public int FriendNumber { get; private set; }
@@ -40,7 +38,8 @@ namespace SharpTox.Core
                 FileNumber = fileNumber;
             }
         }
-        #endregion
+
+        #endregion Base Classes
 
         public class FriendRequestEventArgs : EventArgs
         {

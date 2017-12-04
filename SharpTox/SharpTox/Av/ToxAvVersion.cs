@@ -1,6 +1,4 @@
-﻿using SharpTox.Core;
-
-namespace SharpTox.Av
+﻿namespace SharpTox.Av
 {
     /// <summary>
     /// Represents a version of ToxAv.
@@ -13,7 +11,7 @@ namespace SharpTox.Av
         public int Major { get; private set; }
 
         /// <summary>
-        /// The minor version number. Incremented when functionality is added without breaking the API or ABI. 
+        /// The minor version number. Incremented when functionality is added without breaking the API or ABI.
         /// Set to 0 when the major version number is incremented.
         /// </summary>
         public int Minor { get; private set; }

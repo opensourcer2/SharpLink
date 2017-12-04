@@ -30,6 +30,7 @@ namespace SharpTox.Core
             get { return _options.UdpEnabled; }
             set { _options.UdpEnabled = value; }
         }
+
         /// <summary>
         /// LocalDiscoveryEnabled
         /// </summary>

@@ -62,6 +62,7 @@
 
         //Constants for the the tox data file
         internal const uint Cookie = 0x15ed1b1f;
+
         internal const uint CookieInner = 0x01ce;
     }
 }

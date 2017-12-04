@@ -1,9 +1,6 @@
-﻿using Newtonsoft.Json;
-using SharpTox.Core;
+﻿using SharpTox.Core;
 using Skynet.Models;
-using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -18,7 +15,6 @@ namespace Skynet.Base
     /// </summary>
     public class RequestProxy
     {
-
         public static ToxRequest toNodeRequest(HttpRequestMessage req)
         {
             return new ToxRequest
@@ -37,7 +33,6 @@ namespace Skynet.Base
 
         public static async Task<ToxResponse> sendRequest(Skynet host, ToxRequest req)
         {
-
             // if req is not send to local node
             if (host.tox.Id.ToString() != req.toToxId)
             {

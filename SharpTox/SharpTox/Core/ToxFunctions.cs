@@ -11,7 +11,7 @@ namespace SharpTox.Core
 #if POSIX
         const string dll = "libtoxcore.so";
 #else
-        const string dll = "libtox";
+        private const string dll = "libtox";
 #endif
 
         [DllImport(dll, CallingConvention = CallingConvention.Cdecl, EntryPoint = "tox_new")]
@@ -252,6 +252,7 @@ namespace SharpTox.Core
         internal static extern int GroupPeerPubkey(ToxHandle tox, int groupnumber, int peernumber, byte[] pk);
 
         #region Register callback functions
+
         [DllImport(dll, CallingConvention = CallingConvention.Cdecl, EntryPoint = "tox_callback_friend_request")]
         internal static extern void RegisterFriendRequestCallback(ToxHandle tox, ToxDelegates.CallbackFriendRequestDelegate callback, IntPtr userdata);
 
@@ -315,6 +316,6 @@ namespace SharpTox.Core
         [DllImport(dll, CallingConvention = CallingConvention.Cdecl, EntryPoint = "tox_log_cb")]
         internal static extern void ToxLogCallback(ToxHandle tox, ToxLogLevel level, string file, uint line, string func, string message, IntPtr userdata);
 
-        #endregion
+        #endregion Register callback functions
     }
 }

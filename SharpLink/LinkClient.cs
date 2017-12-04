@@ -1,18 +1,17 @@
-﻿using System;
+﻿using SharpTox.Core;
+using Skynet.Models;
+using Skynet.Utils;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SharpTox.Core;
 using System.Net;
-using Skynet.Models;
+using System.Text;
 using System.Threading;
-using Skynet.Utils;
-using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace SharpLink
 {
-    class LinkClient
+    internal class LinkClient
     {
         public string targetToxId;
         public ToxId serverToxId;
@@ -58,7 +57,7 @@ namespace SharpLink
                         mSkynet.sendResponse(response, new ToxId(response.toToxId));
                         Utils.Log("Event: Send Response Complete reqId: " + mReq.uuid);
                     }
-						        if(mReq != null)
+                    if (mReq != null)
                         Thread.Sleep(1);
                 }
             });
@@ -93,7 +92,6 @@ namespace SharpLink
                 Console.WriteLine("Event: Handshake Success, ReqId: " + reqid + ", ClientId: " + clientId);
                 return true;
             }
-
         }
 
         private async Task<bool> Connect()
@@ -189,7 +187,7 @@ namespace SharpLink
             else
                 return true;
         }
-        
+
         public Task<ToxResponse> SendAsync(byte[] msg, int size)
         {
             lastActiveTime = DateTime.UtcNow;

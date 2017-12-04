@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Diagnostics;
+using System.IO;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
-using System.IO;
-using System.Diagnostics;
 
 namespace Skynet.Utils
 {
@@ -90,7 +86,7 @@ namespace Skynet.Utils
 
         public static void Log(string detail)
         {
-        #if (DEBUG)
+#if (DEBUG)
             lock (loglock)
             {
                 if (streamwriter == null)
@@ -103,7 +99,7 @@ namespace Skynet.Utils
                 streamwriter.WriteLine("Time: " + timeSpan.TotalMilliseconds + ", " + detail);
                 streamwriter.Flush();
             }
-        #endif
+#endif
         }
 
         public static void Log(string detail, bool force)
@@ -138,10 +134,9 @@ namespace Skynet.Utils
         {
             var durationTicks = Math.Round(durationSeconds * Stopwatch.Frequency);
             var sw = Stopwatch.StartNew();
-        
+
             while (sw.ElapsedTicks < durationTicks)
             {
-        
             }
         }
     }

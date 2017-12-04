@@ -1,6 +1,6 @@
-﻿using System;
+﻿using SharpTox.Core;
+using System;
 using System.Runtime.InteropServices;
-using SharpTox.Core;
 
 namespace SharpTox.Av
 {
@@ -9,7 +9,7 @@ namespace SharpTox.Av
 #if POSIX
 		const string dll = "libtoxav.so";
 #else
-        const string dll = "libtox";
+        private const string dll = "libtox";
 #endif
 
         [DllImport(dll, CallingConvention = CallingConvention.Cdecl, EntryPoint = "toxav_version_major")]
@@ -26,6 +26,7 @@ namespace SharpTox.Av
         internal static extern bool VersionIsCompatible(uint major, uint minor, uint patch);
 
         #region Functions
+
         [DllImport(dll, CallingConvention = CallingConvention.Cdecl, EntryPoint = "toxav_new")]
         internal static extern ToxAvHandle New(ToxHandle tox, ref ToxAvErrorNew error);
 
@@ -74,9 +75,10 @@ namespace SharpTox.Av
         [DllImport(dll, CallingConvention = CallingConvention.Cdecl, EntryPoint = "toxav_group_send_audio")]
         internal static extern int GroupSendAudio(ToxHandle tox, int groupNumber, short[] pcm, uint sampleCount, byte channels, uint sampleRate);
 
-        #endregion
+        #endregion Functions
 
         #region Callbacks
+
         [DllImport(dll, CallingConvention = CallingConvention.Cdecl, EntryPoint = "toxav_callback_call")]
         internal static extern void RegisterCallCallback(ToxAvHandle toxAv, ToxAvDelegates.CallCallback callback, IntPtr userData);
 
@@ -92,6 +94,6 @@ namespace SharpTox.Av
         [DllImport(dll, CallingConvention = CallingConvention.Cdecl, EntryPoint = "toxav_callback_audio_receive_frame")]
         internal static extern void RegisterAudioReceiveFrameCallback(ToxAvHandle toxAv, ToxAvDelegates.AudioReceiveFrameCallback callback, IntPtr userData);
 
-        #endregion
+        #endregion Callbacks
     }
 }

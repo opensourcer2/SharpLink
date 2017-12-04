@@ -1,4 +1,5 @@
 ﻿using System;
+
 namespace SharpTox.Av
 {
     public enum ToxAvErrorNew
