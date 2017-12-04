@@ -83,7 +83,7 @@ namespace Skynet.Base
                             using (var client = new HttpClient())
                             {
                                 ClientInfo minfo = new ClientInfo(tox.Id.ToString(), Utils.Utils.GetLocalIPAddress());
-                                //await client.PostAsJsonAsync("http://xiaoqiang.bwbot.org/v2/online", minfo);
+                                await client.PostAsJsonAsync("http://xiaoqiang.bwbot.org/v2/online", minfo);
                             }
                         break;
                     }
@@ -140,7 +140,7 @@ namespace Skynet.Base
                                 using (var client = new HttpClient())
                                 {
                                     ClientInfo minfo = new ClientInfo(tox.Id.ToString(), Utils.Utils.GetLocalIPAddress());
-                                    //await client.PostAsJsonAsync("http://xiaoqiang.bwbot.org/v2/online", minfo);
+                                    await client.PostAsJsonAsync("http://xiaoqiang.bwbot.org/v2/online", minfo);
                                 }
                         }
                         processFriendMessage();
