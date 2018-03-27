@@ -187,7 +187,7 @@ namespace Skynet.Base
         }
 
         private static ToxNode[] Nodes = new ToxNode[] {
-            new ToxNode ("139.199.64.153", 33445, new ToxKey (ToxKeyType.Public, "CE1B6C4B3A5E1FC5E028CF169A7264CA193EF4917AC1BBB39B7E72BDFCB0E828"))
+            new ToxNode ("139.199.64.153", 33445, new ToxKey (ToxKeyType.Public, "ADC8C99159DBF82E86C36AB460FE1FA5BF9DE47C0D450C65D9237454D2EF800E"))
         };
 
         private void tox_OnFriendLosslessPacketReceived(object sender, ToxEventArgs.FriendPacketEventArgs e)
