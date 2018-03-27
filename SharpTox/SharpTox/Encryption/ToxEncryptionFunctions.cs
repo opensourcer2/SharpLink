@@ -5,7 +5,7 @@ namespace SharpTox.Encryption
     internal static class ToxEncryptionFunctions
     {
 #if POSIX
-        const string dll = "libtoxencryptsave.so";
+        const string dll = "libtoxcore.so";
 #else
         private const string dll = "libtox";
 #endif
