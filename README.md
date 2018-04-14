@@ -9,7 +9,7 @@ SSH to your office computer from home, and many many things that used to be poss
 
 ## Compile
 ### Linux
-1. Install toxcore, the instruction can be found [here](https://github.com/irungentoo/toxcore/blob/master/INSTALL.md)
+1. Install toxcore, the instruction can be found [here](https://github.com/TokTok/c-toxcore/blob/master/INSTALL.md)
 2. Install MonoDevelop
    ```
    sudo apt-get install mono-complete
@@ -88,7 +88,7 @@ In fact this process is simple. We create a socket both on local computer and re
 ## 编译安装
 
 ### Linux
-1. 安装toxcore,这里有详细的安装方法
+1. 安装toxcore,[这里](https://github.com/TokTok/c-toxcore/blob/master/INSTALL.md)有详细的安装方法
 2. 安装MonoDevelop,打开IDE之后编译.注意要把变异类型设置成Debug POSIX 或者 Release POSIX版本.
 
 
