@@ -125,4 +125,7 @@
       </Properties>
     </MonoDevelop>
   </ProjectExtensions>
+  <PropertyGroup>
+    <PostBuildEvent>xcopy /Q /Y /S "$(TargetDir)*" "$(SolutionDir)dist"</PostBuildEvent>
+  </PropertyGroup>
 </Project>
