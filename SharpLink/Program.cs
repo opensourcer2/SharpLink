@@ -40,27 +40,32 @@ namespace SharpLink
             }
             Skynet.Base.Skynet mSkynet = null;
             string exeDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            Directory.SetCurrentDirectory(exeDir);
+
+            string AppDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            string toxFolder = Path.Combine(AppDataFolder, "ToxTunnel");
+            string toxFile = Path.Combine(toxFolder, "tox.dat");
+
+            //Directory.SetCurrentDirectory(exeDir);
             if (args.Length == 0)
             {
                 // log to file
-                Utils.setLogFile("server.log");
+                Utils.setLogFile("toxtunnel_server.log");
             }
             else
             {
                 // log to file
-                Utils.setLogFile("client.log");
+                Utils.setLogFile("toxtunnel_client.log");
             }
 
             // Save tox data for server
-            if (args.Length == 0 && File.Exists("tox.dat"))
+            if (args.Length == 0 && File.Exists(toxFile))
             {
-                mSkynet = new Skynet.Base.Skynet("tox.dat");
+                mSkynet = new Skynet.Base.Skynet(toxFile);
             }
-            else if (args.Length == 0 && !File.Exists("tox.dat"))
+            else if (args.Length == 0 && !File.Exists(toxFile))
             {
                 mSkynet = new Skynet.Base.Skynet();
-                mSkynet.Save("tox.dat");
+                mSkynet.Save(toxFile);
             }
             else
             {

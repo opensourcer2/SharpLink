@@ -76,6 +76,7 @@ namespace Skynet.Utils
         }
 
         private static StreamWriter streamwriter = null;
+        private static StreamWriter streamWriterToxID = null;
         private static object loglock = new object();
         private static string logFilename = "log.txt";
 
@@ -91,7 +92,12 @@ namespace Skynet.Utils
             {
                 if (streamwriter == null)
                 {
-                    FileStream fs = new FileStream(logFilename, FileMode.Create);
+                    string AppDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+                    string logFolder = Path.Combine(AppDataFolder, "ToxTunnel");
+                    Directory.CreateDirectory(logFolder);
+
+                    string logFile = Path.Combine(logFolder, logFilename);
+                    FileStream fs = new FileStream(logFile, FileMode.Create);
                     streamwriter = new StreamWriter(fs);
                     streamwriter.AutoFlush = true;
                 }
@@ -108,13 +114,33 @@ namespace Skynet.Utils
             {
                 if (streamwriter == null)
                 {
-                    FileStream fs = new FileStream(logFilename, FileMode.Create);
+                    string AppDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+                    string logFolder = Path.Combine(AppDataFolder, "ToxTunnel");
+                    Directory.CreateDirectory(logFolder);
+
+                    string logFile = Path.Combine(logFolder, logFilename);
+                    FileStream fs = new FileStream(logFile, FileMode.Create);
                     streamwriter = new StreamWriter(fs);
                     streamwriter.AutoFlush = true;
                 }
                 streamwriter.WriteLine("Time: " + UnixTimeNow() + ", " + detail);
                 streamwriter.Flush();
             }
+        }
+
+        public static void WriteNodeInfo(string detail, bool force)
+        {
+                if (streamWriterToxID == null)
+                {
+                    string idFile = Path.Combine(Environment.CurrentDirectory, System.Environment.MachineName + ".id");
+                    FileStream fs = new FileStream(idFile, FileMode.Create);
+                    Console.WriteLine("Tox ID has been written to: " + idFile);
+                    streamWriterToxID = new StreamWriter(fs);
+                    streamWriterToxID.AutoFlush = true;
+                }
+                streamWriterToxID.WriteLine(detail);
+                streamWriterToxID.Flush();
+            
         }
 
         public static string GetLocalIPAddress()

@@ -77,14 +77,8 @@ namespace Skynet.Base
                     {
                         Console.WriteLine("From Server " + httpPort + ":" + "tox is connected.");
                         Utils.Utils.Log("From Server " + httpPort + ":" + "tox is connected.", true);
+                        Utils.Utils.WriteNodeInfo(tox.Id.ToString(), true);
                         offLineCount = 0;
-                        // send a online message to server
-                        if (filename != "")
-                            using (var client = new HttpClient())
-                            {
-                                ClientInfo minfo = new ClientInfo(tox.Id.ToString(), Utils.Utils.GetLocalIPAddress());
-                                await client.PostAsJsonAsync("http://xiaoqiang.bwbot.org/v2/online", minfo);
-                            }
                         break;
                     }
                     else
@@ -135,13 +129,6 @@ namespace Skynet.Base
                         {
                             onlineStatus = true;
                             Utils.Utils.Log("Event: tox is online");
-                            // send a online message to server
-                            if (filename != "")
-                                using (var client = new HttpClient())
-                                {
-                                    ClientInfo minfo = new ClientInfo(tox.Id.ToString(), Utils.Utils.GetLocalIPAddress());
-                                    await client.PostAsJsonAsync("http://xiaoqiang.bwbot.org/v2/online", minfo);
-                                }
                         }
                         processFriendMessage();
                     }

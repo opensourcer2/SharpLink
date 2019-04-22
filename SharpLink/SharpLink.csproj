@@ -47,6 +47,7 @@
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="install_win.ps1" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
@@ -126,6 +127,8 @@
     </MonoDevelop>
   </ProjectExtensions>
   <PropertyGroup>
-    <PostBuildEvent>xcopy /Q /Y /S "$(TargetDir)*" "$(SolutionDir)dist"</PostBuildEvent>
+    <PostBuildEvent>robocopy "$(ProjectDir.TrimEnd('\'))" "$(SolutionDir)dist" install_win.ps1
+(robocopy "$(TargetDir.TrimEnd('\'))" "$(SolutionDir)dist" /S /IS /IT /XO /XF *.xml *.pdb) ^&amp; IF %25ERRORLEVEL%25 LEQ 7 exit 0
+</PostBuildEvent>
   </PropertyGroup>
 </Project>
