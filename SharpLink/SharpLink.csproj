@@ -13,7 +13,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug</OutputPath>
+    <OutputPath>$(SolutionDir)\dist\Debug</OutputPath>
     <DefineConstants>DEBUG;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -23,7 +23,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>full</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release</OutputPath>
+    <OutputPath>$(SolutionDir)\dist\Release\</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Externalconsole>true</Externalconsole>
@@ -127,8 +127,6 @@
     </MonoDevelop>
   </ProjectExtensions>
   <PropertyGroup>
-    <PostBuildEvent>robocopy "$(ProjectDir.TrimEnd('\'))" "$(SolutionDir)dist" install_win.ps1
-(robocopy "$(TargetDir.TrimEnd('\'))" "$(SolutionDir)dist" /S /IS /IT /XO /XF *.xml *.pdb) ^&amp; IF %25ERRORLEVEL%25 LEQ 7 exit 0
-</PostBuildEvent>
+    <PostBuildEvent>xcopy /Y "$(ProjectDir)install_win.ps1" "$(SolutionDir)dist\Release\"</PostBuildEvent>
   </PropertyGroup>
 </Project>
