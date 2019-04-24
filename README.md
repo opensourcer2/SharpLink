@@ -1,7 +1,7 @@
 SharpLink
 ==========
 
-***SharpLink*** is a socket proxy. It can bind other computer's port to local port. You can directly access your local port to communicate with other computers. This software is based on [Tox](https://github.com/irungentoo/toxcore "toxcore") project
+***SharpLink*** is a socket proxy. It can bind other computer's port to local port. You can directly access your local port to communicate with other computers. This software is based on [Tox](https://github.com/TokTok/c-toxcore) project
 
 So why it is useful?
 You can use it to play LAN games with your friends.
@@ -9,24 +9,34 @@ SSH to your office computer from home, and many many things that used to be poss
 
 ## Compile
 ### Linux
+0. Required Debian 9 or newer.
 1. Install toxcore, the instruction can be found [here](https://github.com/TokTok/c-toxcore/blob/master/INSTALL.md)
-2. Install MonoDevelop
+2. Install MonoDevelop and NuGet
    ```
-   sudo apt-get install mono-complete
+   sudo apt-get install mono-complete nuget
    ```
-3. Compile, you have to set build type to Debug POSIX or Release POSIX to build it. If you are facing with errors of dll not match, you have to reinstall depent libraries.
+3. Clone this project
+
+   ```
+   git clone https://github.com/opensourcer2/SharpLink
+   git checkout master
+   ```
+   
+4. Compile, you have to set build type to `Debug POSIX` or `Release POSIX` to build it. If you are facing with errors of dll not match, you have to reinstall dependent libraries.
+   ```
+   nuget restore
+   xbuild /p:Configuration="Debug POSIX" /p:PostBuildEvent=
 
 ### Windows
-clone this project
+Clone this project
 
-    git clone https://github.com/randoms/SharpLink
+    git clone https://github.com/opensourcer2/SharpLink
     git checkout master
-
-If you simply want to use it, you do not need to compile it. It is already compiled in dist folder. SharpLink.exe is the execute. Be careful, the .dll files in disk folder are also needed.
 
 How to compile
 
-open SharpLink.sln with visual studio. You can compile it with visual studio.
+Download `libtox.dll` from the [Tox](https://github.com/TokTok/c-toxcore) project and put it in the `dist` folder.
+Open SharpLink.sln with visual studio and build it. The build result will be in the folder `dist`
 
 ## Usage
 For example if computer B wants to connect to computer A's port 3128. But computer A and computer B are not in the same LAN.
@@ -78,7 +88,7 @@ In fact this process is simple. We create a socket both on local computer and re
 ## Licence
   You are free to do anything...
 
-***SharpLink*** 简单来说就是一个端口代理软件。它能够把任意远程电脑的端口映射到本地端口。这样你就可以通过直接连接本地端口来和远程的电脑通信。这是一个p2p软件所以连接速度要比vpn之类的快很多。这个软件是建立在[Tox](https://github.com/irungentoo/toxcore "toxcore")项目之上的。
+***SharpLink*** 简单来说就是一个端口代理软件。它能够把任意远程电脑的端口映射到本地端口。这样你就可以通过直接连接本地端口来和远程的电脑通信。这是一个p2p软件所以连接速度要比vpn之类的快很多。这个软件是建立在[Tox](https://github.com/TokTok/c-toxcore/blob/master/INSTALL.md)项目之上的。
 
 有什么用？
 有很多用处，你可以利用这个和不同局域网的人玩局域网游戏。远程控制不在同一个局域网内的电脑。连接不在同一个局域网的ftp服务器。总之，几乎所有被局域网限制的应用都可用这个来解除限制。
