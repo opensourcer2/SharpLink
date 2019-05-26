@@ -253,4 +253,4 @@ paket-files/
 build/
 
 # Binary Output
-dist/
+build_deb/Release/

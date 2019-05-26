@@ -1,0 +1,5 @@
+ #!/bin/sh
+
+export DYLD_LIBRARY_PATH=/usr/lib/toxtunnel:$DYLD_LIBRARY_PATH
+export LD_LIBRARY_PATH=/usr/lib/toxtunnel:$LD_LIBRARY_PATH
+exec /usr/bin/mono /usr/lib/toxtunnel/SharpLink.exe "$@"

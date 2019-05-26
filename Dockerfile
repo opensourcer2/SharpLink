@@ -1,7 +1,9 @@
-FROM debian:9
+FROM ubuntu:18.04
 LABEL Description="This image is used to build ToxTunnel for Linux" Vendor="n/a" Version="0.0.0"
 
-WORKDIR /tmp/tox
+WORKDIR /tmp
+RUN mkdir /tmp/toxtunnel
+ENV DEBIAN_FRONTEND=noninteractive
 
 # Add dependencies for SharpLink build
 RUN apt-get update && apt-get upgrade -y && \
@@ -10,13 +12,16 @@ RUN apt-get update && apt-get upgrade -y && \
     nuget
 
 # Add dependencies for toxcore
-RUN apt-get install -y && \
+RUN apt-get install -y \
     autoconf \
     automake \
     libconfig-dev \
     libsodium-dev \
     build-essential \
     checkinstall \
+    devscripts \
+    lintian \
+    dh-make \
     check \
     autotools-dev \
     libtool \
@@ -39,7 +44,4 @@ RUN git clone https://github.com/TokTok/c-toxcore.git && \
     make && \
     make install
 
-RUN git clone https://github.com/opensourcer2/SharpLink && \
-    cd SharpLink && \
-    nuget restore && \
-    xbuild /p:Configuration="Debug POSIX" /p:PostBuildEvent=
+ENTRYPOINT ["/tmp/toxtunnel/build_toxtunnel.sh"]

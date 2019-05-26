@@ -1,0 +1,20 @@
+Source: toxtunnel
+Section: utils
+Priority: optional
+Maintainer: opensourcer2 <opencrypto@protonmail.com>
+Build-Depends: debhelper (>= 10)
+Standards-Version: 4.1.2
+#Homepage: <insert the upstream URL, if relevant>
+#Vcs-Git: https://anonscm.debian.org/git/collab-maint/toxtunnel.git
+#Vcs-Browser: https://anonscm.debian.org/cgit/collab-maint/toxtunnel.git
+
+Package: toxtunnel
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: This is a socket proxy. 
+ ToxTunnel can bind other computer's port to local port. 
+ You can directly access your local port to communicate with other computers. 
+ This software is based on Tox project.
+ You can use it to play LAN games with your friends. 
+ SSH to your office computer from home, 
+ and many many things that used to be possible only in LANs.
